@@ -3,62 +3,70 @@
 var body = document.querySelector("body");
 
 var taxiPositionCounter = 1;
-
+var taxiPassengerCounter = 7
 
 body.onkeydown = function(e){
 
-  console.log(e);
 
-    displayTaxiPassengerCount(7);
-
+    displayTaxiPassengerCount(taxiPassengerCounter);
     //right arrow : 39
     //left arrow  : 37
     //up arrow    : 38
     //down arrow  : 40
+    //key o       : 79
 
+//Check if the taxi position counter is less or more than 9 || 1
+//Avoid errors thrown in developer tools console.
+    if (taxiPositionCounter < 1) {
+      taxiPositionCounter = 1;
+    }
+    else if (taxiPositionCounter > 9 ) {
+      taxiPositionCounter = 1;
+    }
+
+    //Declare a new instance of traffic light
     var myTrafficLight = new TrafficLight(taxiPositionCounter);
 
-
-
-    // to move the taxi forward...
-    // when the right arrow is pressed
-    //work with `taxiPositionCounter`
-    if (myTrafficLight.state() === 'orange') {
-      displayMessage('Traffic Light is orange. Slow down!');
-    }
+    //Check if the up arrow is pressed
     if (e.keyCode === 38) {
+      //Check the traffic light state
     if (myTrafficLight.state() === 'green' || myTrafficLight.state() === 'orange') {
+      //Switch on the red light
       myTrafficLight.red();
-      displayMessage("Traffic Light Red. Switch light to green to move!")
   }
 
   }
 
+//Check if the down arrow is pressed
   if (e.keyCode === 40) {
+    //Check if the traffic light state
     if (myTrafficLight.state() === 'red' || myTrafficLight.state() === 'orange') {
+      //Switch on green light
       myTrafficLight.green();
-      displayMessage('Traffic Light is green. You may go!')
     }
 
     }
 
+    //Check if the 'o' key is pressed
+    if (e.keyCode === 79) {
+      //Swith the light to orange
+      myTrafficLight.orange();
+    }
 
-    // call `calculateTaxiLocation` to get a taxi location className store it in a variable.
-    // increment the `taxiPositionCounter`
-    // call `calculateTaxiLocation` to the new a taxi location className store it in another variable.
-    //Declare new traffic light
-
-
+    //Check if the 'forward'/ right arrow is pressed
     if (e.keyCode === 39){
+      //Check if the traffic light is red
       if (myTrafficLight.state() === 'red') {
-          //
+          //do nothing
       }
       else {
+        //Pass through the taxi position as a parameter to calculateTaxiLocation function
         var taxiLocation = calculateTaxiLocation(taxiPositionCounter);
+        //Increment taxi position
         taxiPositionCounter++;
+        //Pass taxi position to calculateTaxiLocation function
         var currentLocation = calculateTaxiLocation(taxiPositionCounter);
-        //pass both to the `moveTaxi( firstClassName, secondClassName)` function
-        //
+        //Pass above variables through as Parameters and move the taxi
         moveTaxi(taxiLocation, currentLocation);
 
       }
@@ -73,12 +81,25 @@ body.onkeydown = function(e){
 
     else {var taxiLocation = calculateTaxiLocation(taxiPositionCounter);
     taxiPositionCounter--;
-    var currentLocation = calculateTaxiLocation(taxiPositionCounter);
+    var currentLocation = calculateTaxiLocation(taxiPositionCounter);5
     moveTaxi(taxiLocation, currentLocation);
   }
 }
 
+if (myTrafficLight.state() === 'orange' && e.keyCode === 79) {
+    taxiPassengerCounter--;
+}
+else {
+  //
+}
 
+if (taxiPositionCounter === 9) {
+  var TotalPassengerLost = 7 - taxiPassengerCounter;
+  displayMessage('You lost ' + TotalPassengerLost + ' passengers');
+}
 
+if (taxiPassengerCounter < 0) {
+  alert('Game Over!!');
+}
 
 }
